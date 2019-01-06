@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>picshare</groupId>
+    <artifactId>picshare-imagemanagement</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
+
+    <properties>
+        <api.version>1.0-SNAPSHOT</api.version>
+        <entitete.version>1.0-SNAPSHOT</entitete.version>
+        <storitve.version>1.0-SNAPSHOT</storitve.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <kumuluzee.version>2.5.0-SNAPSHOT</kumuluzee.version>
+        <kumuluzee-rest.version>1.1.0</kumuluzee-rest.version>
+        <kumuluzee-openapi.version>1.0.0-SNAPSHOT</kumuluzee-openapi.version>
+        <postgresql.version>42.1.4</postgresql.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <kumuluzee-cors.version>1.0.2</kumuluzee-cors.version>
+    </properties>
+
+    <modules>
+        <module>api</module>
+        <module>entitete</module>
+        <module>storitve</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- https://mvnrepository.com/artifact/com.kumuluz.ee/kumuluzee-core -->
+            <dependency>
+                <groupId>com.kumuluz.ee</groupId>
+                <artifactId>kumuluzee-core</artifactId>
+                <version>${kumuluzee.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.kumuluz.ee/kumuluzee-servlet-jetty -->
+            <dependency>
+                <groupId>com.kumuluz.ee</groupId>
+                <artifactId>kumuluzee-servlet-jetty</artifactId>
+                <version>${kumuluzee.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.kumuluz.ee/kumuluzee-jpa-eclipselink -->
+            <dependency>
+                <groupId>com.kumuluz.ee</groupId>
+                <artifactId>kumuluzee-jpa-eclipselink</artifactId>
+                <version>${kumuluzee.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.kumuluz.ee/kumuluzee-cdi-weld -->
+            <dependency>
+                <groupId>com.kumuluz.ee</groupId>
+                <artifactId>kumuluzee-cdi-weld</artifactId>
+                <version>${kumuluzee.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.kumuluz.ee/kumuluzee-jta-narayana -->
+            <dependency>
+                <groupId>com.kumuluz.ee</groupId>
+                <artifactId>kumuluzee-jta-narayana</artifactId>
+                <version>${kumuluzee.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.kumuluz.ee/kumuluzee-jax-rs-jersey -->
+            <dependency>
+                <groupId>com.kumuluz.ee</groupId>
+                <artifactId>kumuluzee-jax-rs-jersey</artifactId>
+                <version>${kumuluzee.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kumuluz.ee.rest</groupId>
+                <artifactId>kumuluzee-rest-core</artifactId>
+                <version>${kumuluzee-rest.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kumuluz.ee.openapi</groupId>
+                <artifactId>kumuluzee-openapi</artifactId>
+                <version>${kumuluzee-openapi.version}</version>
+            </dependency>
+            <!-- module dependencies -->
+            <dependency>
+                <groupId>picshare</groupId>
+                <artifactId>picshare-imagemanagement-entitete</artifactId>
+                <version>${entitete.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>picshare</groupId>
+                <artifactId>picshare-imagemanagement-storitve</artifactId>
+                <version>${storitve.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>picshare</groupId>
+                <artifactId>picshare-imagemanagement-api</artifactId>
+                <version>${api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kumuluz.ee.cors</groupId>
+                <artifactId>kumuluzee-cors</artifactId>
+                <version>${kumuluzee-cors.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>sonatype-snapshots</id>
+            <name>Sonatype Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>sonatype-snapshots</id>
+            <name>Sonatype Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+</project>

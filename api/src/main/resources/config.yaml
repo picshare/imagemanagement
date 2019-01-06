@@ -1,0 +1,17 @@
+kumuluzee:
+  name: picshare-userservice
+  version: 1.0.0
+  env:
+    name: dev
+  datasources:
+    - jndi-name: jdbc/SimpleJdbcDS
+      connection-url: jdbc:postgresql://localhost:5432/picshareuserservice
+      username: postgres
+      password: postgres
+      max-pool-size: 20
+  cors-filter:
+      annotations:
+        my-resource:
+          allow-origin: "*"
+          supported-methods: "GET, POST, DELETE, HEAD, OPTIONS"
+          allow-subdomains: true

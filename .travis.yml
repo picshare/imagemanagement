@@ -1,0 +1,30 @@
+branches:
+  only:
+  - master
+
+sudo: required
+
+services:
+  - docker
+
+language: java
+dist: trusty
+
+jdk:
+- openjdk8
+
+cache:
+  directories:
+  - $HOME/.m2
+
+env:
+  - DOCKER_IMAGE=jernejcernelc/picshare-storage:0.1
+
+script:
+  - mvn clean package -U
+  - cd api
+  - docker build -t "$DOCKER_IMAGE" .
+
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push "$DOCKER_IMAGE"
