@@ -1,11 +1,14 @@
 kumuluzee:
-  name: picshare-userservice
+  name: picshare-imagemanagement
   version: 1.0.0
+  server:
+      http:
+        port: 8082
   env:
     name: dev
   datasources:
     - jndi-name: jdbc/SimpleJdbcDS
-      connection-url: jdbc:postgresql://localhost:5432/picshareuserservice
+      connection-url: jdbc:postgresql://localhost:5433/picshareimagemanagement
       username: postgres
       password: postgres
       max-pool-size: 20
@@ -15,3 +18,7 @@ kumuluzee:
           allow-origin: "*"
           supported-methods: "GET, POST, DELETE, HEAD, OPTIONS"
           allow-subdomains: true
+
+microservice-mapping:
+  storage: "http://localhost:8081/v1"
+  userservice: "http://localhost:8080/v1"

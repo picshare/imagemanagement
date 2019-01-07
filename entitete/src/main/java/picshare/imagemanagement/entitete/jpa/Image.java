@@ -9,39 +9,35 @@ import java.io.Serializable;
 @Entity(name = "picshare_image")
 @NamedQueries(value =
         {
-                @NamedQuery(name = "User.getAll", query = "SELECT i FROM picshare_image i"),
+                @NamedQuery(name = "Image.deleteAllByAlbum", query = "DELETE FROM picshare_image i WHERE i.album = :albumid")
         })
 public class Image implements Serializable {
-
-    @XmlElement
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idImage;
+    private Integer imageId;
     @XmlElement
-    @Column(nullable = false)
-    private String path;
+    @ManyToOne
+    @JoinColumn(name="albumid", nullable = false)
+    private Album album;
+
     @XmlElement
     @Column(nullable = false)
     private String name;
-    @XmlElement
-    @Column(nullable = false)
-    private Integer albumId;
 
-
-    public Integer getIdImage() {
-        return idImage;
+    public Integer getImageId() {
+        return imageId;
     }
 
-    public void setIdImage(Integer idImage) {
-        this.idImage = idImage;
+    public void setImageId(Integer imageId) {
+        this.imageId = imageId;
     }
 
-    public String getPath() {
-        return path;
+    public Album getAlbum() {
+        return album;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setAlbum(Album album) {
+        this.album = album;
     }
 
     public String getName() {
@@ -50,13 +46,5 @@ public class Image implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getAlbumId() {
-        return albumId;
-    }
-
-    public void setAlbumId(Integer albumId) {
-        this.albumId = albumId;
     }
 }
