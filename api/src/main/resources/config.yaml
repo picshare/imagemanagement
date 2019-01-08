@@ -18,6 +18,13 @@ kumuluzee:
           allow-origin: "*"
           supported-methods: "GET, POST, DELETE, HEAD, OPTIONS"
           allow-subdomains: true
+  health:
+      servlet:
+        mapping: /health
+        enabled: true
+      checks:
+        data-source-health-check:
+          jndi-name: jdbc/SimpleJdbcDS
 
 microservice-mapping:
   storage: "http://localhost:8081/v1"
