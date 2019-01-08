@@ -23,6 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kumuluzee-cors.version>1.0.2</kumuluzee-cors.version>
         <kumuluz-health.version>1.0.1</kumuluz-health.version>
+        <kumuluzee-metrics.version>1.0.0</kumuluzee-metrics.version>
     </properties>
 
     <modules>
@@ -110,6 +111,11 @@
                 <groupId>com.kumuluz.ee.health</groupId>
                 <artifactId>kumuluzee-health</artifactId>
                 <version>${kumuluz-health.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kumuluz.ee.metrics</groupId>
+                <artifactId>kumuluzee-metrics-core</artifactId>
+                <version>${kumuluzee-metrics.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

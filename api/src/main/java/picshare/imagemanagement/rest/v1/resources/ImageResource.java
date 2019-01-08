@@ -2,6 +2,7 @@ package picshare.imagemanagement.rest.v1.resources;
 
 import com.kumuluz.ee.rest.beans.QueryParameters;
 import org.apache.commons.io.IOUtils;
+import org.eclipse.microprofile.metrics.annotation.Metered;
 import picshare.imagemanagement.entitete.business.newImage;
 import picshare.imagemanagement.entitete.business.updateImage;
 import picshare.imagemanagement.entitete.jpa.Image;
@@ -32,6 +33,7 @@ public class ImageResource {
     ImageBean iB;
 
     @GET
+    @Metered(name = "requests.get.images")
     public Response returnImages(){
         QueryParameters query = QueryParameters.query(uriInfo.getRequestUri().getQuery()).build();
         List<Image> images = iB.getAllImages(query);
@@ -45,6 +47,7 @@ public class ImageResource {
 
     @Path("/data/{id}")
     @GET
+    @Metered(name = "requests.get.image.data")
     public Response returnImageData(@PathParam("id") Integer id){
         Image image = iB.getImageData(id);
         if(image != null) {
@@ -58,6 +61,7 @@ public class ImageResource {
     @Path("/raw/{id}")
     @Produces("image/png")
     @GET
+    @Metered(name = "requests.get.image.raw")
     public Response returnImageRaw(@PathParam("id") Integer id){
         byte[] bImage = iB.getImageRaw(id);
         if(bImage != null) {
@@ -76,6 +80,7 @@ public class ImageResource {
     }
 
     @POST
+    @Metered(name = "requests.add.image")
     public Response addImage(newImage image){
         Image i = iB.addImage(image);
         if(i != null) {
@@ -87,6 +92,7 @@ public class ImageResource {
 
     @Path("{id}")
     @PUT
+    @Metered(name = "requests.update.image")
     public Response updateImage(@PathParam("id") Integer id, updateImage image) {
         Image i = iB.updateImage(id, image);
         if(i != null) {
@@ -98,6 +104,7 @@ public class ImageResource {
 
     @Path("{id}")
     @DELETE
+    @Metered(name = "requests.delete.image")
     public Response deleteImage(@PathParam("id") Integer id) {
         if(iB.deleteImage(id)) {
             return Response.status(Response.Status.NO_CONTENT).build();

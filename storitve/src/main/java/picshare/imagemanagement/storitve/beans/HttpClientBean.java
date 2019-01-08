@@ -20,8 +20,8 @@ public class HttpClientBean {
     public void sendImage(String toURL, Integer userId, Integer albumId, Integer imageId, String encodedImage) throws Exception {
         HttpClient httpclient = HttpClients.createDefault();
         HttpPost httppost = new HttpPost(toURL);
-
         String json = "{\"userId\": "+ userId +", \"albumId\": "+ albumId +", \"imageId\": "+ imageId +", \"encodedImage\": \""+ encodedImage +"\"}";
+
         StringEntity requestEntity = new StringEntity(json);
         httppost.setEntity(requestEntity);
         httppost.setHeader("Accept", "application/json");
