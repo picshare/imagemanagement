@@ -39,14 +39,16 @@ public class HttpClientBean {
 
     }
 
-    public void checkUser(String toURL, Integer userId) throws RuntimeException {
+    public boolean checkUser(String toURL, Integer userId) throws RuntimeException {
         HttpClient httpclient = HttpClients.createDefault();
         HttpGet httpget = new HttpGet(toURL+"/"+userId);
 
         try {
             HttpResponse response = httpclient.execute(httpget);
             if (response.getStatusLine().getStatusCode() != 200) {
-                throw new RuntimeException("User with id '"+ userId +"' does't exist");
+                return false;
+            } else {
+                return true;
             }
         } catch (Exception e) {
             throw new RuntimeException(e.toString());

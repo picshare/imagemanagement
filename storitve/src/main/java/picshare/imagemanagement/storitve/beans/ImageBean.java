@@ -101,29 +101,21 @@ public class ImageBean {
     public Image addImage(newImage newImage) {
             Image i = new Image();
             Album a = aB.getAlbum(newImage.getAlbumId());
-            hcB.checkUser(mmc.getUserservice()+"/user", newImage.getUserId());
 
-            if(a != null) {
-                if(newImage.getUserId() == a.getUserId()) {
-                    i.setAlbum(a);
-                    i.setName(newImage.getName());
-                    em.persist(i);
-                    em.flush();
+            if(a != null && newImage.getUserId() == a.getUserId() && hcB.checkUser(mmc.getUserservice()+"/user", newImage.getUserId())) {
+                i.setAlbum(a);
+                i.setName(newImage.getName());
+                em.persist(i);
+                em.flush();
 
-                    //image is saved on storage microservice
-                    hcB.sendImage(mmc.getStorage()+"/image", newImage.getUserId(), newImage.getAlbumId(), i.getImageId(), newImage.getEncodedImage());
+                //image is saved on storage microservice
+                hcB.sendImage(mmc.getStorage()+"/image", newImage.getUserId(), newImage.getAlbumId(), i.getImageId(), newImage.getEncodedImage());
 
-                    log.info(String.format("Added Image(name: %s, albumId: %s, imageId: %s)", i.getName(), i.getAlbum().getAlbumId(), i.getImageId()));
-                } else {
-                    log.info("Wrong id");
-                    i = null;
-                }
+                log.info(String.format("Added Image(name: %s, albumId: %s, imageId: %s)", i.getName(), i.getAlbum().getAlbumId(), i.getImageId()));
+                return i;
             } else {
-                log.info("Given album doesn't exist");
-                i = null;
+                return null;
             }
-
-            return i;
     }
 
     @Transactional
