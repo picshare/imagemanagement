@@ -10,7 +10,8 @@ public class MicroserviceMappingConfig {
 
     private String storage;
     private String userservice;
-    private String commentsmanagement;
+    private String qrApi;
+    private String rapidApiKey;
 
     public String getStorage() {
         return storage;
@@ -28,11 +29,19 @@ public class MicroserviceMappingConfig {
         this.userservice = userservice;
     }
 
-    public String getCommentsmanagement() {
-        return commentsmanagement;
+    public String getQrApi() {
+        return qrApi;
     }
 
-    public void setCommentsmanagement(String commentsmanagement) {
-        this.commentsmanagement = commentsmanagement;
+    public void setQrApi(String qrApi) {
+        this.qrApi = qrApi;
+    }
+
+    public String getRapidApiKey() {
+        return rapidApiKey;
+    }
+
+    public void setRapidApiKey(String rapidApiKey) {
+        this.rapidApiKey = rapidApiKey;
     }
 }

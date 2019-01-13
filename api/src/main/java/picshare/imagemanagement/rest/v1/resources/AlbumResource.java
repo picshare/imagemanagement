@@ -1,5 +1,8 @@
 package picshare.imagemanagement.rest.v1.resources;
 
+import com.kumuluz.ee.logs.LogManager;
+import com.kumuluz.ee.logs.Logger;
+import com.kumuluz.ee.logs.cdi.Log;
 import com.kumuluz.ee.rest.beans.QueryParameters;
 import picshare.imagemanagement.entitete.jpa.Album;
 import picshare.imagemanagement.storitve.beans.AlbumBean;
@@ -12,14 +15,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
-import java.util.logging.Logger;
 
 @Path("album")
+@Log
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
 public class AlbumResource {
-    private final Logger log = Logger.getLogger(this.getClass().getName());
+    private static final Logger LOG = LogManager.getLogger(ImageResource.class.getName());
 
     @Context
     protected UriInfo uriInfo;

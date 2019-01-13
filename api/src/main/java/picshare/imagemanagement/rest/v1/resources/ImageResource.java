@@ -1,5 +1,8 @@
 package picshare.imagemanagement.rest.v1.resources;
 
+import com.kumuluz.ee.logs.LogManager;
+import com.kumuluz.ee.logs.Logger;
+import com.kumuluz.ee.logs.cdi.Log;
 import com.kumuluz.ee.rest.beans.QueryParameters;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.microprofile.metrics.annotation.Metered;
@@ -17,14 +20,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Base64;
 import java.util.List;
-import java.util.logging.Logger;
 
 @Path("image")
+@Log
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
 public class ImageResource {
-    private final Logger log = Logger.getLogger(this.getClass().getName());
+    private static final Logger LOG = LogManager.getLogger(ImageResource.class.getName());
 
     @Context
     protected UriInfo uriInfo;
@@ -75,15 +78,41 @@ public class ImageResource {
             }).build();
         }
         else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
+
+
+    @Path("/QR/{id}")
+    @Produces("image/png")
+    @GET
+    @Metered(name = "requests.get.image,QR")
+    public Response returnImageQR(@PathParam("id") Integer id){
+        byte[] bImage = iB.getImageQR(id);
+        if(bImage != null) {
+            return Response.ok().entity(new StreamingOutput(){
+                @Override
+                public void write(OutputStream output)
+                        throws IOException, WebApplicationException {
+                    output.write(bImage);
+                    output.flush();
+                }
+            }).build();
+        }
+        else {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+
 
     @POST
     @Metered(name = "requests.add.image")
     public Response addImage(newImage image){
         Image i = iB.addImage(image);
         if(i != null) {
+            if(i.getImageId() == 0) {
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("FAULT TOLEARNCE").build();
+            }
             return Response.status(Response.Status.OK).entity(i).build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();

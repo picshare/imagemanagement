@@ -1,5 +1,6 @@
 package picshare.imagemanagement.storitve.beans;
 
+import com.kumuluz.ee.configuration.utils.ConfigurationUtil;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
@@ -10,37 +11,47 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.io.ByteArrayOutputStream;
+import java.io.*;
 import java.util.logging.Logger;
 
 @ApplicationScoped
 public class HttpClientBean {
     private final Logger log = Logger.getLogger(this.getClass().getName());
 
-    public void sendImage(String toURL, Integer userId, Integer albumId, Integer imageId, String encodedImage) throws Exception {
+    public void sendImage(String toURL, Integer userId, Integer albumId, Integer imageId, String encodedImage) throws RuntimeException {
         HttpClient httpclient = HttpClients.createDefault();
         HttpPost httppost = new HttpPost(toURL);
         String json = "{\"userId\": "+ userId +", \"albumId\": "+ albumId +", \"imageId\": "+ imageId +", \"encodedImage\": \""+ encodedImage +"\"}";
+        try {
+            StringEntity requestEntity = new StringEntity(json);
+            httppost.setEntity(requestEntity);
+            httppost.setHeader("Accept", "application/json");
+            httppost.setHeader("Content-type", "application/json");
 
-        StringEntity requestEntity = new StringEntity(json);
-        httppost.setEntity(requestEntity);
-        httppost.setHeader("Accept", "application/json");
-        httppost.setHeader("Content-type", "application/json");
+            HttpResponse response = httpclient.execute(httppost);
+            if (response.getStatusLine().getStatusCode() != 200) {
+                throw new RuntimeException("Failed to send the image to storage microservice");
+            }
+        } catch (Exception e) {
+                throw new RuntimeException(e.toString());
 
-        HttpResponse response = httpclient.execute(httppost);
-        if (response.getStatusLine().getStatusCode() != 200) {
-            throw new Exception("Failed to send the image to storage microservice");
         }
+
     }
 
-    public void checkUser(String toURL, Integer userId) throws Exception {
+    public void checkUser(String toURL, Integer userId) throws RuntimeException {
         HttpClient httpclient = HttpClients.createDefault();
         HttpGet httpget = new HttpGet(toURL+"/"+userId);
 
-        HttpResponse response = httpclient.execute(httpget);
-        if (response.getStatusLine().getStatusCode() != 200) {
-            throw new Exception("User with id '"+ userId +"' does't exist");
+        try {
+            HttpResponse response = httpclient.execute(httpget);
+            if (response.getStatusLine().getStatusCode() != 200) {
+                throw new RuntimeException("User with id '"+ userId +"' does't exist");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
         }
+
     }
 
     public byte[] getImageRaw(String toURL, Integer userId, Integer albumId, Integer imageId) throws Exception {
@@ -51,7 +62,41 @@ public class HttpClientBean {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         if (response.getStatusLine().getStatusCode() != 200) {
-            throw new Exception("Failed to send the image to storage microservice");
+            throw new Exception("Failed to get the image from storage microservice");
+        } else {
+            response.getEntity().writeTo(baos);
+            return baos.toByteArray();
+        }
+    }
+
+    public byte[] getImageQR(String toURL, String rapidAPIKey, Integer imageId) throws Exception {
+        HttpClient httpclient = HttpClients.createDefault();
+        HttpPost httppost = new HttpPost(toURL);
+
+        String bgColor = "#ffffff";
+        Integer width = 128;
+        String fgColor = "#000000";
+        Integer height = 128;
+        String content = ConfigurationUtil.getInstance().get("kumuluzee.server.base-url").get()+ "/image/raw/"+imageId;
+
+        String json = "{\"bg-color\": \""+ bgColor +
+                "\", \"width\": "+ width +
+                ", \"fg-color\": \""+ fgColor +
+                "\", \"height\": "+ height +
+                ", \"content\": \""+ content +"\"}";
+
+
+
+        StringEntity requestEntity = new StringEntity(json);
+        httppost.setEntity(requestEntity);
+        httppost.setHeader("X-RapidAPI-Key", rapidAPIKey);
+        httppost.setHeader("Content-type", "application/json");
+
+        HttpResponse response = httpclient.execute(httppost);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        if (response.getStatusLine().getStatusCode() != 200) {
+            throw new Exception("Failed to send request to qrAPI");
         } else {
             response.getEntity().writeTo(baos);
             return baos.toByteArray();

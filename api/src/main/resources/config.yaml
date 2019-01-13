@@ -2,6 +2,7 @@ kumuluzee:
   name: picshare-imagemanagement
   version: 1.0.0
   server:
+      base-url: http://localhost:8082/v1
       http:
         port: 8082
   env:
@@ -29,3 +30,5 @@ kumuluzee:
 microservice-mapping:
   storage: "http://localhost:8081/v1"
   userservice: "http://localhost:8080/v1"
+  qr-api: "https://neutrinoapi-qr-code.p.rapidapi.com/qr-code"
+  rapid-api-key: "fe76d007b5msh573d7c747a018d9p160cdajsn4e21704abffb"
